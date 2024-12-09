@@ -2,15 +2,18 @@ package menu.model
 
 class MenuArchive {
     private val recommendMenus: MutableList<RecommendMenuByCoach> = mutableListOf()
-    private val categoriesByDay: MutableList<Pair<DayOfTheWeek, String>> = mutableListOf()
+    private val categoriesByDay: MutableList<String> = mutableListOf()
 
-    fun saveMenus(dayOfTheWeek: DayOfTheWeek, category: String, coachName: String, recommendMenu: String) {
+    fun saveMenus(dayOfTheWeek: DayOfTheWeek, coachName: String, recommendMenu: String) {
         recommendMenus.add(
             RecommendMenuByCoach(
                 dayOfTheWeek, coachName, recommendMenu,
             )
         )
-        categoriesByDay.add(dayOfTheWeek to category)
+    }
+
+    fun saveCategory(category: String) {
+        categoriesByDay.add(category)
     }
 
     fun isDuplicatedMenu(menuName: String, coachName: String): Boolean {
@@ -20,5 +23,13 @@ class MenuArchive {
             if (recommendFood.recommendMenu == menuName) count++
         }
         return count != 0
+    }
+
+    fun getRecommendMenus(): List<RecommendMenuByCoach> {
+        return recommendMenus.toList()
+    }
+
+    fun getCategoriesByDay(): List<String> {
+        return categoriesByDay.toList()
     }
 }
