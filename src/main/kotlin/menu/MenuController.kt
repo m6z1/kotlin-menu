@@ -7,6 +7,6 @@ class MenuController(
 ) {
 
     fun start() {
-        inputView.getCoachNames()
+        val coaches = inputView.getCoachNames()
     }
 }
