@@ -1,9 +1,6 @@
 package menu.controller
 
-import menu.model.CategoryRandomGenerator
-import menu.model.Coach
-import menu.model.DayOfTheWeek
-import menu.model.MenuRandomGenerator
+import menu.model.*
 import menu.view.InputView
 import menu.view.OutputView
 
@@ -12,6 +9,7 @@ class MenuController(
     private val outputView: OutputView,
     private val categoryRandomGenerator: CategoryRandomGenerator,
     private val menuRandomGenerator: MenuRandomGenerator,
+    private val menuArchive: MenuArchive,
 ) {
 
     fun start() {
@@ -26,10 +24,14 @@ class MenuController(
     }
 
     private fun recommendLunchMenu(coaches: List<Coach>) {
-        DayOfTheWeek.entries.forEach {
+        DayOfTheWeek.entries.forEach { day ->
+            val category = categoryRandomGenerator.generateCategory()
             coaches.forEach { coach ->
-                val category = categoryRandomGenerator.generateCategory()
-                menuRandomGenerator.generateRecommendMenu(category, coach)
+                var recommendMenu = menuRandomGenerator.generateRecommendMenu(category, coach)
+                while (menuArchive.isDuplicatedMenu(recommendMenu, coach.name)) {
+                    recommendMenu = menuRandomGenerator.generateRecommendMenu(category, coach)
+                }
+                menuArchive.saveMenus(day, category, coach.name, recommendMenu)
             }
         }
     }
