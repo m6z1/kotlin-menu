@@ -1,4 +1,4 @@
-package menu
+package menu.controller
 
 import menu.model.Coach
 import menu.view.InputView
